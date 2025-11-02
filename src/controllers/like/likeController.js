@@ -4,21 +4,21 @@ export const toggleLike = async (req, res) => {
     try {
         const { userId, postId } = req.body;
 
-        if (!userId, postId)
+        if (!userId || !postId)
             return res.status(400).json({ message: "userID e postID são obrigatórios." });
 
         const existiLike = await Like.findOne({ where: { userId, postId } });
 
         if (existiLike) {
             await existiLike.destroy();
-            return res.status(200).json({ liked: false ; message: "Like foi removido." });
+            return res.status(200).json({ liked: false, message: "Like foi removido." });
         }
 
         await Like.create({ userId, postId });
         res.status(201).json({ liked: true, message: "Like adicionado" });
 
     }catch (error) {
-        console.error("Erro ao processar like:", errpr);
+        console.error("Erro ao processar like:", error);
         res.status(500).json({ message: "Erro Interno." });
     }
 };

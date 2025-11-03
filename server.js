@@ -5,7 +5,7 @@ const PORT = 3000;
 
 async function startServer() {
     try {
-        await sequelize.sync({ alter:true });
+        await sequelize.sync();
         console.log("Database has sucessful connected!");
         
         app.listen(PORT, () => {
@@ -13,6 +13,8 @@ async function startServer() {
         });
     } catch (error) {
         console.error("Database hasn´t connected, check the error!")
+            console.error("Detalhes do erro:", error.message);
+        console.error(error); // mostra o stack completo
     }
 }
 

@@ -10,7 +10,8 @@ User.init(
         email: { type: DataTypes.STRING, allowNull: false, unique: true },
         password: { type: DataTypes.STRING, allowNull: false },
         nickname: { type: DataTypes.STRING(25), allowNull:false },
-        description: { type:DataTypes.STRING(150) }
+        description: { type:DataTypes.STRING(150) },
+        role: { type:DataTypes.STRING(25), defaultValue: "commonUser" }
     },
     {sequelize, modelName: "User"}
 );

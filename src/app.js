@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', postRoutes);
-app.use('/users', userRoutes);
+app.use('/', userRoutes);
 app.use('/api', likeRoutes);
 
 export default app;

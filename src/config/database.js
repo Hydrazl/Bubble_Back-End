@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize('bubble_db', 'root', '123456789', {
+const sequelize = new Sequelize('bubble_db', 'root', 'aluno', {
     host: 'localhost',
     dialect: 'mysql',
 });

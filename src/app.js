@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
@@ -12,6 +13,12 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.json()); // Nós permite fazer o uso do JSON no corpo de requisições
 app.use(bodyParser.json())
+
+
+app.use(cors({
+  origin: "http://localhost:5173", // porta do seu React
+  credentials: true
+}));
 
 app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos

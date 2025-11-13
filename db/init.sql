@@ -1,2 +1,4 @@
+-- Active: 1763060401871@@127.0.0.1@3306@bubble_db
 DROP DATABASE IF EXISTS bubble_db;
 CREATE DATABASE IF NOT EXISTS bubble_db;
+SELECT * FROM users;

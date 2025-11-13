@@ -2,7 +2,7 @@ import app from './src/app.js';
 import sequelize from './src/config/database.js';
 import { seedUsers } from "./src/seeders/userSeeder.js";
 
-const PORT = 4000
+const PORT = 3000
 
 async function startServer() {
     try {

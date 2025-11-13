@@ -1,7 +1,7 @@
 import express from 'express';
 import { newPostController } from "../controllers/post/createPostController.js";
 import { getPostByIdController } from '../controllers/post/getPostByiDController.js';
-import { upload } from "../middleware/uploadMIddleware.js";
+import upload from "../middleware/uploadMIddleware.js";
 
 const router = express.Router();
 

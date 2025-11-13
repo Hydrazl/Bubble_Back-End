@@ -1,8 +1,11 @@
 import app from './src/app.js';
 import sequelize from './src/config/database.js';
 import { seedUsers } from "./src/seeders/userSeeder.js";
+import dotenv from 'dotenv';
 
-const PORT = 3000
+dotenv.config();
+
+const PORT = process.env.PORT || 3000
 
 async function startServer() {
     try {

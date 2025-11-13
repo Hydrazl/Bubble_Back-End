@@ -4,7 +4,7 @@ export async function seedUsers() {
   const count = await User.count();
   if (count === 0) {
     await User.bulkCreate([
-      { username: "Admin", email: "Admin@bubble.com", password: "admin007", nickname: "Admin-Ts" }
+      { username: "Admin", email: "Admin@bubble.com", password: "admin007", nickname: "Admin-Ts", admin: true }
     ]);
     console.log("Adm inserido!");
   } else {

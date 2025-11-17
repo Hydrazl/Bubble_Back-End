@@ -11,7 +11,6 @@ User.init(
         password: { type: DataTypes.STRING, allowNull: false },
         nickname: { type: DataTypes.STRING(25), allowNull:false },
         description: { type:DataTypes.STRING(150) },
-        admin: { type:DataTypes.BOOLEAN, defaultValue: false }
     },
     {sequelize, modelName: "User"}
 );

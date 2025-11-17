@@ -1,5 +1,5 @@
 import Follow from '../../models/followModel.js';
-import User from './../../models/userModel.js';
+import User from '../../models/userModel.js';
 
 export const getByIdUser = async (req, res) => {
     try {

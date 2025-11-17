@@ -24,12 +24,12 @@ app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos
 
 // Rotas
-app.get('/', (req, res) => {
-    res.send('Hello world');
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello world');
+// });
 
 app.use('/', postRoutes);
 app.use('/', userRoutes);
-app.use('/api', likeRoutes);
+app.use('/', likeRoutes);
 
 export default app;

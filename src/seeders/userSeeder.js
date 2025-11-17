@@ -1,8 +1,8 @@
 import User from "../models/userModel.js";
 
 export async function seedUsers() {
-  const count = await User.count();
-  if (count === 0) {
+  const admin = await User.findOne({ where: {username: 'Admin'}});
+  if (!admin) {
     await User.bulkCreate([
       { username: "Admin", email: "Admin@bubble.com", password: "admin007", nickname: "Admin-Ts", admin: true }
     ]);

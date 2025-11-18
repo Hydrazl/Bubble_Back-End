@@ -1,26 +1,37 @@
-import Follow from '../../models/followModel.js';
 import User from '../../models/userModel.js';
 
 export const getByIdUser = async (req, res) => {
     try {
-        const user = await User.findByPK(req.user.id, {
-            attributes: ['id', 'username', 'email', 'nickname', 'description', 'admin']
+        const { userId } = req.params;
+        
+        console.log('🔍 Buscando usuário:', userId);
+
+        const user = await User.findByPk(userId, {
+            attributes: ['id', 'username', 'email', 'nickname', 'description']
         });
 
-        const followersCount = await Follow.count ({
-            where: { followerId: user.id}
-        })
-        const followingCount = await Follow.count ({
-            where: {followingId: user.id}
-        })
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        console.log('✅ Usuário encontrado:', user.username);
 
         res.json({
-            ...user.toJSON(),
-            followersCount,
-            followingCount
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            nickname: user.nickname,
+            description: user.description,
+            followersCount: 0, // Por enquanto fixo
+            followingCount: 0, // Por enquanto fixo
+            bubbleCount: 0
         });
 
     } catch (error) {
-        res.status(500).json({ message: 'Erro ao Busar informações do Usuário'});
+        console.error('❌ Erro:', error);
+        res.status(500).json({ 
+            message: 'Erro ao buscar informações do Usuário', 
+            error: error.message 
+        });
     }
 };

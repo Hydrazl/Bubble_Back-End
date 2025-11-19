@@ -9,7 +9,8 @@ export async function newPostController(req, res) {
         if (req.file) {
             media = `uploads/${req.file.filename}`; // Em caso de ser arquivo
         } else  if (mediaURL) {
-           media = mediaURL ; // Em caso de ser link
+           media = mediaURL ; // Em caso de ser l
+           // ink
         }
         
         // Validação do Post

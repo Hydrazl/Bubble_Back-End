@@ -41,3 +41,5 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Erro na criação do Usuário!" });
   }
 };
+
+console.log("Arquivo createUserController.js carregado!");

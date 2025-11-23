@@ -1,15 +1,19 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js";
 
-class Post extends Model {}
-
-Post.init(
-    {
-        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-        description: { type: DataTypes.STRING },
-        media: { type: DataTypes.STRING }
-    },
-    {sequelize, modelName: "Post"}
-);
+const Post = sequelize.define("Post", {
+  titulo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  conteudo: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
+});
 
 export default Post;

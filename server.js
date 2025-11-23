@@ -1,9 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import app from './src/app.js';
 import sequelize from './src/config/database.js';
 import { seedUsers } from "./src/seeders/userSeeder.js";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const PORT = process.env.PORT || 3000
 

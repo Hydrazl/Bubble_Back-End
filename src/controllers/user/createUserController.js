@@ -1,9 +1,12 @@
 import bcrypt from "bcrypt";
 import User from "../../models/userModel.js";
+import { Op } from 'sequelize';
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password, nickname } = req.body;
+    console.log('DEBUG req.body:', req.body); 
+    console.log('DEBUG Content-Type:', req.headers['content-type']);
+    const { username, email, password,} = req.body;
 
     // verifica se o e-mail já existe
     const existingUser = await User.findOne({ where: { email } });
@@ -20,7 +23,6 @@ export const registerUser = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      nickname,
     });
 
     // não retorna a senha na resposta
@@ -28,8 +30,7 @@ export const registerUser = async (req, res) => {
       id: newUser.id,
       username: newUser.username,
       email: newUser.email,
-      nickname: newUser.nickname,
-      role: newUser.role,
+      admin: newUser.admin,
     };
 
     res.status(201).json({
@@ -39,5 +40,98 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     console.error(`Erro ao criar o Usuário: ${error}`);
     res.status(500).json({ message: "Erro na criação do Usuário!" });
+  }
+};
+
+export const completeProfile = async (req, res) => {
+  try {
+    console.log('Body data (req.body):', req.body); 
+    console.log('Files (req.files):', req.files); 
+    
+    const { userId, nickname, description } = req.body;
+    const files = req.files;
+
+    console.log('Step 2 - Completando perfil:', { userId, nickname, description });
+    console.log('Arquivos:', files ? Object.keys(files) : 'nenhum');
+
+    // Validações
+    if (!userId) {
+      return res.status(400).json({ 
+        message: "ID do usuário é obrigatório" 
+      });
+    }
+
+    if (!nickname || !nickname.trim()) {
+      return res.status(400).json({ 
+        message: "Nickname é obrigatório" 
+      });
+    }
+
+    // Buscar usuário
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ 
+        message: "Usuário não encontrado" 
+      });
+    }
+
+    // Verificar se nickname já está em uso (por outro usuário)
+    const existingNickname = await User.findOne({ 
+      where: { 
+        nickname: nickname.trim(),
+        id: { [Op.ne]: userId } // Excluir o próprio usuário
+      } 
+    });
+    if (existingNickname) {
+      return res.status(400).json({ 
+        message: "Este nickname já está em uso" 
+      });
+    }
+
+    // Montar dados para atualização
+    const updateData = {
+      nickname: nickname.trim()
+    };
+
+    // Description é opcional
+    if (description !== undefined) {
+      updateData.description = description.trim();
+    }
+
+    // ProfilePic é opcional
+    if (files?.profilePic?.[0]) {
+      updateData.profilePic = `/uploads/${files.profilePic[0].filename}`;
+      console.log('📸 Foto de perfil:', updateData.profilePic);
+    }
+
+    // Banner é opcional
+    if (files?.banner?.[0]) {
+      updateData.banner = `/uploads/${files.banner[0].filename}`;
+      console.log('Banner:', updateData.banner);
+    }
+
+    console.log('Atualizando usuário com:', updateData);
+
+    // Atualizar usuário
+    await user.update(updateData);
+
+    // Buscar usuário atualizado (sem senha)
+    const updatedUser = await User.findByPk(userId, {
+      attributes: { exclude: ['password'] }
+    });
+
+    console.log('Perfil completado com sucesso!');
+
+    res.json({
+      success: true,
+      message: "Perfil completado com sucesso!",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Erro ao completar perfil:', error);
+    res.status(500).json({ 
+      message: "Erro ao completar perfil",
+      error: error.message 
+    });
   }
 };

@@ -9,8 +9,11 @@ User.init(
         username: { type: DataTypes.STRING(25), allowNull: false, unique: true },
         email: { type: DataTypes.STRING, allowNull: false, unique: true },
         password: { type: DataTypes.STRING, allowNull: false },
-        nickname: { type: DataTypes.STRING(25), allowNull:false },
-        description: { type:DataTypes.STRING(150) },
+        nickname: { type: DataTypes.STRING(25), allowNull:true, defaultValue: null },
+        admin: { type: DataTypes.BOOLEAN, defaultValue: false },
+        description: { type: DataTypes.STRING(150) },
+        profilePic: { type: DataTypes.STRING },
+        banner: { type: DataTypes.STRING },
     },
     {sequelize, modelName: "User"}
 );

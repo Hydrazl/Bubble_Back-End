@@ -100,13 +100,13 @@ export const completeProfile = async (req, res) => {
 
     // ProfilePic é opcional
     if (files?.profilePic?.[0]) {
-      updateData.profilePic = `/uploads/${files.profilePic[0].filename}`;
+      updateData.profilePic = `uploads/users/profile/${files.profilePic[0].filename}`;
       console.log('📸 Foto de perfil:', updateData.profilePic);
     }
 
     // Banner é opcional
     if (files?.banner?.[0]) {
-      updateData.banner = `/uploads/${files.banner[0].filename}`;
+      updateData.banner = `uploads/users/banner/${files.banner[0].filename}`;
       console.log('Banner:', updateData.banner);
     }
 

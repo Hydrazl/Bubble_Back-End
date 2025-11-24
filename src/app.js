@@ -20,7 +20,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+app.use("/uploads", express.static("uploads"));
 app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos
 
 // Rotas

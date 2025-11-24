@@ -1,42 +1,23 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import dotenv from "dotenv";
 
-dotenv.config();
-
-const baseUploadPath = process.env.UPLOADS_PATH || "uploads";
-const userPath = process.env.USERS_UPLOADS_PATH || `${baseUploadPath}/users`;
-const tempPath = process.env.TEMPS_UPLOADS_PATH || `${baseUploadPath}/temps`;
-
-// Garante que as pastas existam
-[userPath, tempPath].forEach((dir) => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
-
-// Função que decide o destino dinamicamente
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Se for upload de perfil (exemplo)
-    if (req.baseUrl.includes("user")) {
-      cb(null, userPath);
-    } 
-    // Se for upload temporário (exemplo)
-    else if (req.baseUrl.includes("temp")) {
-      cb(null, tempPath);
-    } 
-    // Caso padrão
-    else {
-      cb(null, baseUploadPath);
-    }
+  destination: function (req, file, cb) {
+    const folder = file.fieldname === "banner" ? "banner" : "profile";
+    const uploadPath = path.join("uploads", "users", folder);
+
+    // Cria automaticamente se não existir
+    fs.mkdirSync(uploadPath, { recursive: true });
+
+    cb(null, uploadPath);
   },
 
-  filename: (req, file, cb) => {
-    const fileName = `${Date.now()}${path.extname(file.originalname)}`;
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const fileName = `${Date.now()}${ext}`;
     cb(null, fileName);
-  },
+  }
 });
 
 const upload = multer({ storage });

@@ -7,7 +7,7 @@ export const getByIdUser = async (req, res) => {
         console.log('🔍 Buscando usuário:', userId);
 
         const user = await User.findByPk(userId, {
-            attributes: ['id', 'username', 'email', 'nickname', 'description']
+            attributes: ['id', 'username', 'email', 'nickname', 'description', 'banner', 'profilePic']
         });
 
         if (!user) {
@@ -15,6 +15,7 @@ export const getByIdUser = async (req, res) => {
         }
 
         console.log('✅ Usuário encontrado:', user.username);
+        console.log("🔎 Valor do banner no banco:", user.banner);
 
         res.json({
             id: user.id,
@@ -22,6 +23,8 @@ export const getByIdUser = async (req, res) => {
             email: user.email,
             nickname: user.nickname,
             description: user.description,
+            banner: user.banner,
+            profilePic: user.profilePic, 
             followersCount: 0, // Por enquanto fixo
             followingCount: 0, // Por enquanto fixo
             bubbleCount: 0

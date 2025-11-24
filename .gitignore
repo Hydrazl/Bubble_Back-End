@@ -2,4 +2,3 @@ db/init.sql
 .env
 node_modules/
 uploads/
-upload

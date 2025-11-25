@@ -38,8 +38,8 @@ export async function newPostController(req, res) {
             post: newPost
         });
 
-    } catch (error) {
-        console.error("Erro na criação do post:", error);
+    } catch (err) {
+        console.error("Erro na criação do post:", err);
         return res.status(500).json({
             message: "Erro ao tentar criar o post"
         });

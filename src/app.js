@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.send('Hello world');
 });
 
-app.use('/home', postRoutes);
+app.use('/', postRoutes);
 app.use('/', userRoutes);
 app.use('/', likeRoutes);
 

@@ -2,7 +2,7 @@ import Post from '../../models/postModel.js';
 
 export async function newPostController(req, res) {
     try {
-        const { userId, description, mediaURL } = req.body;
+        const { userId, description, mediaURL, nickname } = req.body;
 
         if (!userId) {
             return res.status(400).json({ message: "Usuário não informado." });
@@ -12,7 +12,7 @@ export async function newPostController(req, res) {
 
         // Se vier arquivo via Multer
         if (req.file) {
-            media = `uploads/${req.file.filename}`;
+            media = `posts/${req.file.filename}`;
         }
 
         // Se vier URL de mídia direto

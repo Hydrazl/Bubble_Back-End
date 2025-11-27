@@ -21,7 +21,7 @@ app.use(cors({
 }));
 
 app.use("/uploads", express.static("uploads"));
-app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // Serve arquivos estáticos
 
 // Rotas
 app.get('/', (req, res) => {

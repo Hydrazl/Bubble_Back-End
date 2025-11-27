@@ -17,7 +17,7 @@ async function startServer() {
             console.log(`Server is running on http:localhost:${PORT}`);
         });
     } catch (error) {
-        console.error("Database hasn´t connected, check the error!")
+        console.error("Database hasnt connected, check the error!")
         console.error("Detalhes do erro:", error.message);
         console.error(error); // mostra o stack completo
     }

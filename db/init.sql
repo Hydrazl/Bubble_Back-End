@@ -2,6 +2,6 @@
 DROP DATABASE IF EXISTS bubble_db;
 CREATE DATABASE IF NOT EXISTS bubble_db;
 USE bubble_db;
-SELECT * FROM users;
+SELECT * FROM posts;
 SELECT banner FROM users;
 DESCRIBE users;

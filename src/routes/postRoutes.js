@@ -7,10 +7,10 @@ import { verifyToken }  from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post('/posts', verifyToken, upload.single('media'), newPostController);
+router.post("/posts", upload.single("postImage"), newPostController);
 
-router.get('/posts/:id', getPostByIdController);
+router.get('/home/:id', getPostByIdController);
 
-router.delete('/posts/:id', verifyToken, deletePostController);
+router.delete('/home/:id', verifyToken, deletePostController);
 
 export default router;

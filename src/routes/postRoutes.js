@@ -11,7 +11,8 @@ import { getAllPostsController } from '../controllers/post/getAllPostsController
 const router = express.Router();
 
 router.post("/posts", upload.single("postImage"), newPostController);
-router.get("/posts", getAllPostsController); // Nova rota para buscar todos os posts
+
+router.get("/posts", getAllPostsController);
 
 router.get('/home/:id', getPostByIdController);
 

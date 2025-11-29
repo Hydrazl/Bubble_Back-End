@@ -1,5 +1,4 @@
-import Post from "../../models/postModel.js";
-import User from "../../models/userModel.js";
+import { Post, User } from '../../models/associations.js'
 
 export const getAllPostsController = async (req, res) => {
   try {
@@ -7,10 +6,11 @@ export const getAllPostsController = async (req, res) => {
       include: [
         {
           model: User,
+          as: 'author',
           attributes: ["id", "nickname", "username", "profilePic"], // Traz apenas os dados necessários do usuário
         },
       ],
-      order: [["createdAt", "DESC"]], // Ordena do mais recente para o mais antigo
+      order: [["createdAt", "DESC"]],
     });
 
     res.status(200).json(posts);

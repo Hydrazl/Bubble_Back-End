@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import likeRoutes from './routes/likeRoutes.js';
+import followRoutes from './routes/followRoutes.js'
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', postRoutes);
+app.use('/', followRoutes)
 app.use('/', userRoutes);
 app.use('/like', likeRoutes);
 

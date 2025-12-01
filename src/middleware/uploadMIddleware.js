@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
     let folder = "others";
 
     if (file.fieldname === "banner") folder = "banner";
-    else if (file.fieldname === "profile") folder = "profile";
+    else if (file.fieldname === "profilePic") folder = "profile";
     else if (file.fieldname === "postImage") folder = "posts";
 
     const uploadPath = path.join("uploads", "users", folder);

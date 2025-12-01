@@ -3,11 +3,11 @@ import User from "../../models/userModel.js";
 
 export const deletePostController = async (req, res) => {
     try {
-        const { postId } = req.params;
+        const { id } = req.params;
         const userId = req.user.id;      
         const userRole = req.user.role;  
 
-        const post = await Post.findByPk(postId);
+        const post = await Post.findByPk(id);
 
         if (!post) {
             return res.status(404).json({ message: "Post não encontrado." });
@@ -24,6 +24,6 @@ export const deletePostController = async (req, res) => {
 
     } catch (err) {
         console.error("Erro ao deletar post:", err);
-        return res.statu(500).json({ message: "Erro interno ao deletar post"})
+        return res.status(500).json({ message: "Erro interno ao deletar post"})
     }
 };

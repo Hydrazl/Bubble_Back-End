@@ -1,11 +1,10 @@
-import Post from "../../models/postModel.js";
-import User from "../../models/userModel.js";
+import { Post } from '../../models/associations.js';
 
 export const deletePostController = async (req, res) => {
     try {
         const { id } = req.params;
-        const userId = req.user.id;      
-        const userRole = req.user.role;  
+        const userId = req.user.id; 
+        const userRole = Boolean(req.user.admin);
 
         const post = await Post.findByPk(id);
 
@@ -13,7 +12,7 @@ export const deletePostController = async (req, res) => {
             return res.status(404).json({ message: "Post não encontrado." });
         }
 
-        if (post.userId !== userId && userRole !== "admin") {
+        if (post.userId !== userId && userRole === false) {
             return res.status(403).json({
                 message: "Você não tem permissão para deletar este post."
             });

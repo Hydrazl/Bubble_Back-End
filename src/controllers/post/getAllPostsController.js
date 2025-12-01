@@ -1,8 +1,16 @@
 import { Post, User } from '../../models/associations.js'
+import { Op } from 'sequelize'
 
 export const getAllPostsController = async (req, res) => {
   try {
+    const { userId, keyword, limit = 20, page = 1 } = req.query;
+
+    const whereClause = {};
+    if(userId) whereClause.userId = userId;
+    if(keyword) whereClause.description = { [Op.like]: `%${keyword}%` };
+
     const posts = await Post.findAll({
+      where: whereClause,
       include: [
         {
           model: User,
@@ -11,6 +19,8 @@ export const getAllPostsController = async (req, res) => {
         },
       ],
       order: [["createdAt", "DESC"]],
+      limit: parseInt(limit),
+      offset: (parseInt(page) - 1) * parseInt(limit),
     });
 
     res.status(200).json(posts);

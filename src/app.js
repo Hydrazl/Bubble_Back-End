@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import likeRoutes from './routes/likeRoutes.js';
+import followRoutes from './routes/followRoutes.js'
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -20,16 +21,17 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
-app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos
+app.use("/uploads", express.static("uploads"));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // Serve arquivos estáticos
 
 // Rotas
 app.get('/', (req, res) => {
     res.send('Hello world');
 });
 
-app.use('/home', postRoutes);
+app.use('/', postRoutes);
+app.use('/', followRoutes)
 app.use('/', userRoutes);
-app.use('/', likeRoutes);
+app.use('/like', likeRoutes);
 
 export default app;

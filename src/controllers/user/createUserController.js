@@ -1,9 +1,21 @@
 import bcrypt from "bcrypt";
 import User from "../../models/userModel.js";
+import { Op } from 'sequelize';
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password, nickname } = req.body;
+    console.log('🔍 DEBUG req.body:', req.body); 
+    console.log('🔍 DEBUG Content-Type:', req.headers['content-type']);
+    
+    const { username, email, password } = req.body;
+
+    // ✅ VALIDAR SE OS CAMPOS CHEGARAM
+    if (!username || !email || !password) {
+      console.log('❌ Campos faltando:', { username, email, password: password ? '***' : undefined });
+      return res.status(400).json({ message: "Todos os campos são obrigatórios" });
+    }
+
+    console.log('✅ Dados recebidos:', { username, email });
 
     // verifica se o e-mail já existe
     const existingUser = await User.findOne({ where: { email } });
@@ -11,25 +23,30 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Email já cadastrado em outro usuário." });
     }
 
+    console.log('Email disponível');
+
     // gera hash seguro da senha
-    const saltRounds = 10; // nível de segurança
+    const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    console.log('Senha hasheada');
 
     // cria o usuário no banco com a senha criptografada
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
-      nickname,
+      nickname: username
     });
+
+    console.log('Usuário criado:', newUser.id);
 
     // não retorna a senha na resposta
     const userResponse = {
       id: newUser.id,
       username: newUser.username,
       email: newUser.email,
-      nickname: newUser.nickname,
-      role: newUser.role,
+      admin: newUser.admin,
     };
 
     res.status(201).json({
@@ -37,7 +54,12 @@ export const registerUser = async (req, res) => {
       user: userResponse,
     });
   } catch (error) {
-    console.error(`Erro ao criar o Usuário: ${error}`);
-    res.status(500).json({ message: "Erro na criação do Usuário!" });
+    console.error('ERRO COMPLETO:', error);
+    console.error('Erro message:', error.message);
+    console.error('Erro stack:', error.stack);
+    res.status(500).json({ 
+      message: "Erro na criação do Usuário!",
+      error: error.message
+    });
   }
 };

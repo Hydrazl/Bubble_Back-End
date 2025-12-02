@@ -18,10 +18,10 @@ const Post = sequelize.define("Post", {
   media: {
     type: DataTypes.STRING,
     allowNull: true,
-  }
+  },
   category: {
     type: DataTypes.STRING,
-    allowNull: false;
+    allowNull: false,
   }
 }, {
   timestamps: true, // createdAt, updatedAt

@@ -1,4 +1,4 @@
-import { Post, User } from '../../models/associations.js'
+import { Post, User, Category } from '../../models/associations.js'
 import { Op } from 'sequelize'
 
 export const getAllPostsController = async (req, res) => {

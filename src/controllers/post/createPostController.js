@@ -2,7 +2,7 @@ import Post from '../../models/postModel.js';
 
 export async function newPostController(req, res) {
     try {
-        const { userId, description, mediaURL, nickname } = req.body;
+        const { userId, description, mediaURL, nickname, category } = req.body;
 
         if (!userId) {
             return res.status(400).json({ message: "Usuário não informado." });
@@ -30,7 +30,8 @@ export async function newPostController(req, res) {
         const newPost = await Post.create({
             userId,
             description: description?.trim() || null,
-            media
+            media,
+            category
         });
 
         return res.status(201).json({

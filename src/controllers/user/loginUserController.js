@@ -22,7 +22,7 @@ export const loginUser = async (req, res) => {
 
     // gera token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, admin: user.admin },
       process.env.JWT_SECRET || "admin-ts",
       { expiresIn: "7d" }
     );
@@ -36,7 +36,7 @@ export const loginUser = async (req, res) => {
         nickname: user.nickname,
         email: user.email,
         profilePic: user.profilePic,
-        role: user.role,
+        admin: Boolean(user.admin),
       },
       token,
     });

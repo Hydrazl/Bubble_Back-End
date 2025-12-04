@@ -15,11 +15,11 @@ export const getAllPostsController = async (req, res) => {
         {
           model: User,
           as: 'author',
-          attributes: ["id", "nickname", "username", "profilePic"], // Traz apenas os dados necessários do usuário
+          attributes: ["id", "nickname", "username", "profilePic"]
         },],
       attributes: [
         'id', 'description', 'createdAt',
-        'likesCount', 'commentsCount'
+        'likesCount', 'commentsCount', 'media'
       ],
       order: [["createdAt", "DESC"]],
       limit: parseInt(limit),

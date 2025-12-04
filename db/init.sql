@@ -1,4 +1,4 @@
--- Active: 1764795308841@@127.0.0.1@3306@bubble_db
+-- Active: 1764870581521@@127.0.0.1@3306
 DROP DATABASE IF EXISTS bubble_db;
 CREATE DATABASE IF NOT EXISTS bubble_db;
 USE bubble_db;

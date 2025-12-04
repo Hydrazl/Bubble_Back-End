@@ -1,4 +1,6 @@
 import User from '../../models/userModel.js';
+import Post from '../../models/postModel.js';
+import Follow from '../../models/followModel.js';
 
 export const getByIdUser = async (req, res) => {
     try {
@@ -17,6 +19,18 @@ export const getByIdUser = async (req, res) => {
         console.log('✅ Usuário encontrado:', user.username);
         console.log("🔎 Valor do banner no banco:", user.banner);
 
+        const postsCount = await Post.count({
+            where: { userId }
+        });
+
+        const followersCount = await Follow.count({
+            where: { followingId: userId }
+        });
+
+        const followingCount = await Follow.count({
+            where: { followerId: userId }
+        });
+
         res.json({
             id: user.id,
             username: user.username,
@@ -25,9 +39,10 @@ export const getByIdUser = async (req, res) => {
             description: user.description,
             banner: user.banner,
             profilePic: user.profilePic, 
-            followersCount: 0, // Por enquanto fixo
-            followingCount: 0, // Por enquanto fixo
-            bubbleCount: 0
+            followersCount: followersCount,
+            followingCount: followingCount,
+            postsCount: postsCount,
+            bubbleCount: user.bubbleCount
         });
 
     } catch (error) {

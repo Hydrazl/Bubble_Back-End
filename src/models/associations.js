@@ -6,7 +6,7 @@ import Follow from "./followModel.js";
 import Bubble from "./BubbleModel.js";
 import BubbleMember from "./BubbleMemberModel.js";
 import Category from "./categoryModel.js";
-// import Comment from "./commentModel.js"; // você precisa importar Comment
+// import Comment from "./commentModel.js";
 
 // Relacionamento Usuário
 User.hasMany(Post, { foreignKey: 'userId', as:'posts' })
@@ -18,17 +18,120 @@ User.belongsToMany(Bubble, { through: BubbleMember, as: 'bubbles', foreignKey: '
 // Relacionamento Post - CORRIJA ESTA LINHA
 Post.belongsTo(User, { foreignKey: 'userId', as: 'author' }); // REMOVA o "through: User"
 Post.belongsToMany(User, { through: Like, foreignKey:"postId", otherKey: 'userId', as: 'likers' });
-// Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
-
-// Relacionamento das Categorias
 Post.belongsTo(Category, { foreignKey: "categoryId" });
+// Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
 Category.hasMany(Post, { foreignKey: "categoryId" });
 
 // Relacionamento Like
 Like.belongsTo(User, { foreignKey: 'userId' });
 Like.belongsTo(Post, { foreignKey: 'postId' });
 
+// Relacionamento Comment
+// Comment.belongsTo(User, { foreignKey: 'userId' });
+// Comment.belongsTo(Post, { foreignKey: 'postId' });
+
 // Realacionamento Bubble
 Bubble.belongsToMany(User, { through: BubbleMember, as: 'members', foreignKey: 'bubbleId' })
+
+// Hooks
+Like.afterCreate(async (like) => {
+    try {
+        const post = await Post.findByPk(like.postId);
+        if(post) {
+            await post.increment('likesCount');
+        }
+    } catch (error) {
+        console.error('Erro ao incrementar likesCount:', error);
+    }
+});
+
+Like.afterDestroy(async (like) => {
+    try {
+        const post = await Post.findByPk(like.postId);
+        if(post) {
+            await post.decrement('likesCount');
+        }
+    } catch (error) {
+        console.error('Erro ao decrementar likesCount:', error);
+    }
+});
+
+Post.afterCreate(async (post,options) => {
+    try {
+        await post.increment('postCount');
+    } catch (error) {
+        console.error('Erro ao incrementar postCount:', error);
+    }
+});
+
+Post.afterDestroy(async (post, options) => {
+    try {
+        await post.decrement('postCount');
+    } catch (error) {
+        console.error('Erro ao decrementar postCount:', error);
+    }
+});
+
+Follow.afterCreate(async (follow, options) => {
+    try {
+        const user = await User.findByPk(follow.followingId);
+        if(user) {
+            await user.increment('followersCount');
+        }
+    } catch (error) {
+        console.error('Erro ao incrementar followersCount:', error);
+    }
+
+    try {
+        const user = await User.findByPk(follow.followerId);
+        if(user) {
+            await user.increment('followingCount');
+        }
+    } catch (error) {
+        console.error('Erro ao incrementar followingCount:', error);
+    }
+});
+
+Follow.afterDestroy(async (follow, options) => {
+    try {
+        const user = await User.findByPk(follow.followingId);
+        if(user) {
+            await user.decrement('followersCount');
+        }
+    } catch (error) {
+        console.error('Erro ao decrementar followersCount:', error);
+    }
+
+    try {
+        const user = await User.findByPk(follow.followerId);
+        if(user) {
+            await user.decrement('followingCount');
+        }
+    } catch (error) {
+        console.error('Erro ao decrementar followingCount:', error);
+    }
+});
+
+// Comment.afterCreate(async (comment) => {
+//     try {
+//         const post = await Post.findByPk(comment.postId);
+//         if(post) {
+//             await post.increment('commentsCount');
+//         }
+//     } catch (error) {
+//         console.error('Erro ao incrementar commentsCount:', error);
+//     }
+// });
+
+// Comment.afterDestroy(async (comment) => {
+//     try {
+//         const post = await Post.findByPk(comment.postId);
+//         if(post) {
+//             await post.decrement('commentsCount');
+//         }
+//     } catch (error) {
+//         console.error('Erro ao decrementar commentsCount:', error);
+//     }
+// });
 
 export { sequelize, User, Post, Like, Bubble, Follow, BubbleMember, Category }

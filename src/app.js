@@ -32,6 +32,6 @@ app.get('/', (req, res) => {
 app.use('/', postRoutes);
 app.use('/', followRoutes)
 app.use('/', userRoutes);
-app.use('/like', likeRoutes);
+app.use('/', likeRoutes);
 
 export default app;

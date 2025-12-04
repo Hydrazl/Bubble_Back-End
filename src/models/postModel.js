@@ -18,7 +18,19 @@ const Post = sequelize.define("Post", {
   media: {
     type: DataTypes.STRING,
     allowNull: true,
-  }
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  likesCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  commentsCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
 }, {
   timestamps: true, // createdAt, updatedAt
 });

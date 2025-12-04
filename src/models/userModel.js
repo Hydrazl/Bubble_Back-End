@@ -14,6 +14,9 @@ User.init(
         description: { type: DataTypes.STRING(150) },
         profilePic: { type: DataTypes.STRING },
         banner: { type: DataTypes.STRING },
+        postCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+        followersCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+        followingCount: { type: DataTypes.INTEGER, defaultValue: 0 },
     },
     {sequelize, modelName: "User"}
 );

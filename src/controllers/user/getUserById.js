@@ -42,7 +42,8 @@ export const getByIdUser = async (req, res) => {
             followersCount: followersCount,
             followingCount: followingCount,
             postsCount: postsCount,
-            bubbleCount: user.bubbleCount
+            bubbleCount: user.bubbleCount,
+            posts: user.posts
         });
 
     } catch (error) {

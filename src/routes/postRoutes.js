@@ -1,6 +1,6 @@
 import express from 'express';
 import { newPostController } from "../controllers/post/createPostController.js";
-import { getPostByIdController } from '../controllers/post/getPostByiDController.js';
+import { getPostByIdController } from '../controllers/post/getPostByIdController.js';
 import { deletePostController } from "../controllers/post/deletePostController.js";
 import upload from "../middleware/uploadMIddleware.js";
 import { verifyToken }  from "../middleware/authMiddleware.js";

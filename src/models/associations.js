@@ -6,18 +6,19 @@ import Follow from "./followModel.js";
 import Bubble from "./BubbleModel.js";
 import BubbleMember from "./BubbleMemberModel.js";
 import Category from "./categoryModel.js";
+import Notification from "./notificationModel.js";
 // import Comment from "./commentModel.js";
 
 // Relacionamento Usuário
-User.hasMany(Post, { foreignKey: 'userId', as:'posts' })
-User.belongsToMany(Post, { through: Like, foreignKey:"userId", otherKey:'postId', as: 'likers' });
-User.belongsToMany(User, { through:Follow, foreignKey: 'followerId', otherKey: 'followingId', as: 'following' });
-User.belongsToMany(User, { through:Follow, foreignKey: 'followingId', otherKey: 'followerId', as: 'followers' });
+User.hasMany(Post, { foreignKey: 'userId', as: 'posts' })
+User.belongsToMany(Post, { through: Like, foreignKey: "userId", otherKey: 'postId', as: 'likers' });
+User.belongsToMany(User, { through: Follow, foreignKey: 'followerId', otherKey: 'followingId', as: 'following' });
+User.belongsToMany(User, { through: Follow, foreignKey: 'followingId', otherKey: 'followerId', as: 'followers' });
 User.belongsToMany(Bubble, { through: BubbleMember, as: 'bubbles', foreignKey: 'userId' })
 
 // Relacionamento Post - CORRIJA ESTA LINHA
 Post.belongsTo(User, { foreignKey: 'userId', as: 'author' }); // REMOVA o "through: User"
-Post.belongsToMany(User, { through: Like, foreignKey:"postId", otherKey: 'userId', as: 'likers' });
+Post.belongsToMany(User, { through: Like, foreignKey: "postId", otherKey: 'userId', as: 'likers' });
 Post.belongsTo(Category, { foreignKey: "categoryId" });
 // Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
 Category.hasMany(Post, { foreignKey: "categoryId" });
@@ -33,11 +34,18 @@ Like.belongsTo(Post, { foreignKey: 'postId' });
 // Realacionamento Bubble
 Bubble.belongsToMany(User, { through: BubbleMember, as: 'members', foreignKey: 'bubbleId' })
 
+// Relacionamento Notification
+Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Notification.belongsTo(User, { foreignKey: 'actorId', as: 'actor' });
+Notification.belongsTo(Post, { foreignKey: 'postId', as: 'post' });
+User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
+User.hasMany(Notification, { foreignKey: 'actorId', as: 'actionsNotifications' });
+
 // Hooks
 Like.afterCreate(async (like) => {
     try {
         const post = await Post.findByPk(like.postId);
-        if(post) {
+        if (post) {
             await post.increment('likesCount');
         }
     } catch (error) {
@@ -48,7 +56,7 @@ Like.afterCreate(async (like) => {
 Like.afterDestroy(async (like) => {
     try {
         const post = await Post.findByPk(like.postId);
-        if(post) {
+        if (post) {
             await post.decrement('likesCount');
         }
     } catch (error) {
@@ -56,7 +64,7 @@ Like.afterDestroy(async (like) => {
     }
 });
 
-Post.afterCreate(async (post,options) => {
+Post.afterCreate(async (post, options) => {
     try {
         await post.increment('postCount');
     } catch (error) {
@@ -75,7 +83,7 @@ Post.afterDestroy(async (post, options) => {
 Follow.afterCreate(async (follow, options) => {
     try {
         const user = await User.findByPk(follow.followingId);
-        if(user) {
+        if (user) {
             await user.increment('followersCount');
         }
     } catch (error) {
@@ -84,7 +92,7 @@ Follow.afterCreate(async (follow, options) => {
 
     try {
         const user = await User.findByPk(follow.followerId);
-        if(user) {
+        if (user) {
             await user.increment('followingCount');
         }
     } catch (error) {
@@ -95,7 +103,7 @@ Follow.afterCreate(async (follow, options) => {
 Follow.afterDestroy(async (follow, options) => {
     try {
         const user = await User.findByPk(follow.followingId);
-        if(user) {
+        if (user) {
             await user.decrement('followersCount');
         }
     } catch (error) {
@@ -104,7 +112,7 @@ Follow.afterDestroy(async (follow, options) => {
 
     try {
         const user = await User.findByPk(follow.followerId);
-        if(user) {
+        if (user) {
             await user.decrement('followingCount');
         }
     } catch (error) {
@@ -134,4 +142,4 @@ Follow.afterDestroy(async (follow, options) => {
 //     }
 // });
 
-export { sequelize, User, Post, Like, Bubble, Follow, BubbleMember, Category }
+export { sequelize, User, Post, Like, Bubble, Follow, BubbleMember, Category, Notification }

@@ -1,4 +1,5 @@
 import { Like, Post } from "../../models/associations.js";
+import { createNotification } from "../notification/createNotificationController.js";
 
 export const toggleLike = async (req, res) => {
   try {
@@ -9,9 +10,9 @@ export const toggleLike = async (req, res) => {
     // Verifica se o post existe
     const post = await Post.findByPk(postId);
     if (!post) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Post não encontrado' 
+        message: 'Post não encontrado'
       });
     }
 
@@ -23,10 +24,10 @@ export const toggleLike = async (req, res) => {
     if (existingLike) {
       // Remove o like
       await existingLike.destroy();
-      
+
       // Recarrega o post para pegar o likesCount atualizado (por causa do hook)
       await post.reload();
-      
+
       return res.status(200).json({
         success: true,
         liked: false,
@@ -36,10 +37,18 @@ export const toggleLike = async (req, res) => {
     } else {
       // Adiciona o like
       await Like.create({ userId, postId });
-      
+
+      // Criar notificação para o autor do post
+      try {
+        await createNotification(post.userId, userId, 'like', postId);
+      } catch (notifError) {
+        console.error('Erro ao criar notificação de like:', notifError);
+        // Não falhar a requisição se a notificação falhar
+      }
+
       // Recarrega o post para pegar o likesCount atualizado (por causa do hook)
       await post.reload();
-      
+
       return res.status(201).json({
         success: true,
         liked: true,
@@ -49,10 +58,10 @@ export const toggleLike = async (req, res) => {
     }
   } catch (error) {
     console.error('Erro em toggleLike:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       success: false,
       message: 'Erro ao processar like',
-      error: error.message 
+      error: error.message
     });
   }
 };

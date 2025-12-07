@@ -8,7 +8,8 @@ import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import likeRoutes from './routes/likeRoutes.js';
 import followRoutes from './routes/followRoutes.js';
-import profileRoutes from './routes/profileRoutes.js'; 
+import profileRoutes from './routes/profileRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +36,8 @@ app.use('/', postRoutes);
 app.use('/', followRoutes);
 app.use('/', userRoutes);
 app.use('/', likeRoutes);
-app.use('/', profileRoutes); 
+app.use('/', profileRoutes);
+app.use('/notifications', notificationRoutes);
 
 
 export default app;

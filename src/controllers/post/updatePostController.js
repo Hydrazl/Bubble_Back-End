@@ -5,12 +5,12 @@ export const updatePostController = async (req, res) => {
         const { id } = req.params;
         const { description } = req.body;
 
-        let media = req.file ? req.file.name : null;
+        let media = req.file ? req.file.filename : null;
 
         const post = await Post.findByPk(id);
 
         if (!post) {
-            return res.status(404).json({ error: 'Post não encontrado'});
+            return res.status(404).json({ error: 'Post não encontrado' });
         }
 
         if (!media) {
@@ -23,14 +23,14 @@ export const updatePostController = async (req, res) => {
         await post.save();
 
         return res.json({
-            message: 'Post atualizado com sucesso', 
+            message: 'Post atualizado com sucesso',
             post: {
                 id: post.id,
                 user: post.userId,
                 description: post.description,
                 media: post.media,
                 createdAt: post.createdAt,
-                updateAt: post.updateAt
+                updatedAt: post.updatedAt
             }
         });
 

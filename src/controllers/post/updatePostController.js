@@ -3,9 +3,7 @@ import Post from '../../models/postModel.js';
 export const updatePostController = async (req, res) => {
     try {
         const { id } = req.params;
-        const { description } = req.body;
-
-        let media = req.file ? req.file.filename : null;
+        const { description, existingMedia } = req.body;
 
         const post = await Post.findByPk(id);
 
@@ -13,7 +11,12 @@ export const updatePostController = async (req, res) => {
             return res.status(404).json({ error: 'Post não encontrado' });
         }
 
-        if (!media) {
+        let media;
+        if (req.file) {
+            media = req.file.filename ? `posts/${req.file.filename}` : null;
+        } else if (existingMedia) {
+            media = existingMedia;
+        } else {
             media = post.media;
         }
 

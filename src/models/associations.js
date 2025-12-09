@@ -3,7 +3,6 @@ import User from './userModel.js'
 import Post from './postModel.js'
 import Like from './likeModel.js'
 import Follow from "./followModel.js";
-import Bubble from "./BubbleModel.js";
 import BubbleMember from "./BubbleMemberModel.js";
 import bubbleAside from './bubbleAsideModel.js';
 import Category from "./categoryModel.js";
@@ -15,7 +14,6 @@ User.hasMany(Post, { foreignKey: 'userId', as: 'posts' })
 User.belongsToMany(Post, { through: Like, foreignKey: "userId", otherKey: 'postId', as: 'likers' });
 User.belongsToMany(User, { through: Follow, foreignKey: 'followerId', otherKey: 'followingId', as: 'following' });
 User.belongsToMany(User, { through: Follow, foreignKey: 'followingId', otherKey: 'followerId', as: 'followers' });
-User.belongsToMany(Bubble, { through: BubbleMember, as: 'bubbles', foreignKey: 'userId' })
 
 // Relacionamento Post - CORRIJA ESTA LINHA
 Post.belongsTo(User, { foreignKey: 'userId', as: 'author' }); // REMOVA o "through: User"
@@ -32,11 +30,7 @@ Like.belongsTo(Post, { foreignKey: 'postId' });
 // Comment.belongsTo(User, { foreignKey: 'userId' });
 // Comment.belongsTo(Post, { foreignKey: 'postId' });
 
-// Realacionamento Bubble
-Bubble.belongsToMany(User, { through: BubbleMember, as: 'members', foreignKey: 'bubbleId' })
-
-// Relacionamento das bolhas com os posts
-Bubble.hasMany(Post, { foreignKey: "bubbleId", as: "posts" });
+// Relacionamento das bolhas com os posts'
 Post.belongsTo(bubbleAside, { foreignKey: "bubbleId", as: "bubble" });
 
 // Relacionamento Notification
@@ -147,4 +141,4 @@ Follow.afterDestroy(async (follow, options) => {
 //     }
 // });
 
-export { sequelize, User, Post, Like, Bubble, bubbleAside, Follow, BubbleMember, Category, Notification }
+export { sequelize, User, Post, Like, bubbleAside, Follow, BubbleMember, Category, Notification }

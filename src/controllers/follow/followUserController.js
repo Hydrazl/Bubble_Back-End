@@ -1,4 +1,5 @@
-import { Follow } from '../../models/associations.js';
+import { Follow, Notification } from '../../models/associations.js';
+import { createNotification } from '../notification/createNotificationController.js';
 
 export const followUserController = async (req, res) => {
   try {
@@ -17,10 +18,32 @@ export const followUserController = async (req, res) => {
     if (existingFollow) {
       // Unfollow
       await existingFollow.destroy();
+
+      // Remover notificação de follow se existir
+      try {
+        await Notification.destroy({
+          where: {
+            userId,
+            actorId: followerId,
+            notificationType: 'follow'
+          }
+        });
+      } catch (notifError) {
+        console.error('Erro ao remover notificação de follow:', notifError);
+      }
+
       return res.json({ message: 'Deixou de seguir', isFollowing: false });
     } else {
       // Follow
       await Follow.create({ followerId, followingId: userId });
+
+      // Criar notificação para o usuário seguido
+      try {
+        await createNotification(userId, followerId, 'follow');
+      } catch (notifError) {
+        console.error('Erro ao criar notificação de follow:', notifError);
+      }
+
       return res.json({ message: 'Começou a seguir', isFollowing: true });
     }
   } catch (error) {

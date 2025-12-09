@@ -8,9 +8,16 @@ import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import likeRoutes from './routes/likeRoutes.js';
 import followRoutes from './routes/followRoutes.js';
+<<<<<<< HEAD
 import profileRoutes from './routes/profileRoutes.js'; 
 import trendingRoutes from './routes/trendingRoutes.js';
 import trendingPostRoutes from './routes/trendingPostRoutes.js';
+=======
+import profileRoutes from './routes/profileRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import bubbleRoutes from './routes/bubbleRoutes.js';
+
+>>>>>>> ade4ac2cb6bf60626a1adae4a479715dabbbf589
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +46,9 @@ app.use('/', likeRoutes);
 app.use('/', profileRoutes); 
 app.use('/', trendingRoutes);
 app.use('/trending', trendingPostRoutes)
+app.use('/notifications', notificationRoutes);
+app.use('/bubbles', bubbleRoutes);
+
 
 
 export default app;

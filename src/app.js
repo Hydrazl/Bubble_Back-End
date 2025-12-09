@@ -9,7 +9,8 @@ import postRoutes from './routes/postRoutes.js';
 import likeRoutes from './routes/likeRoutes.js';
 import followRoutes from './routes/followRoutes.js';
 import profileRoutes from './routes/profileRoutes.js'; 
-
+import trendingRoutes from './routes/trendingRoutes.js';
+import trendingPostRoutes from './routes/trendingPostRoutes.js';
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,6 +37,8 @@ app.use('/', followRoutes);
 app.use('/', userRoutes);
 app.use('/', likeRoutes);
 app.use('/', profileRoutes); 
+app.use('/', trendingRoutes);
+app.use('/trending', trendingPostRoutes)
 
 
 export default app;

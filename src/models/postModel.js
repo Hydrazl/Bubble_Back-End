@@ -33,6 +33,7 @@ const Post = sequelize.define("Post", {
   },
   commentsCount: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     defaultValue: 0,
   },
 }, {

@@ -13,6 +13,7 @@ import trendingPostRoutes from './routes/trendingPostRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import bubbleRoutes from './routes/bubbleRoutes.js';
+import commentRoutes from './routes/commentsRoutes.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -44,6 +45,8 @@ app.use('/', trendingRoutes);
 app.use('/trending', trendingPostRoutes)
 app.use('/notifications', notificationRoutes);
 app.use('/bubbles', bubbleRoutes);
+app.use('/', commentRoutes);
+
 
 
 

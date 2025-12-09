@@ -46,6 +46,15 @@ Notification.belongsTo(Post, { foreignKey: 'postId', as: 'post' });
 User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
 User.hasMany(Notification, { foreignKey: 'actorId', as: 'actionsNotifications' });
 
+import Comment from '../models/commentModel.js';
+
+User.hasMany(Comment, { foreignKey: 'userId', as: 'comments' });
+Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
+
+Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
+
+
 // Hooks
 Like.afterCreate(async (like) => {
     try {
@@ -125,26 +134,24 @@ Follow.afterDestroy(async (follow, options) => {
     }
 });
 
-// Comment.afterCreate(async (comment) => {
-//     try {
-//         const post = await Post.findByPk(comment.postId);
-//         if(post) {
-//             await post.increment('commentsCount');
-//         }
-//     } catch (error) {
-//         console.error('Erro ao incrementar commentsCount:', error);
-//     }
-// });
+Comment.afterCreate(async (comment) => {
+    try {
+        const post = await Post.findByPk(comment.postId);
+        if(post) await post.increment('commentsCount');
+    } catch (error) {
+        console.error('Erro ao incrementar commentsCount:', error);
+    }
+});
 
-// Comment.afterDestroy(async (comment) => {
-//     try {
-//         const post = await Post.findByPk(comment.postId);
-//         if(post) {
-//             await post.decrement('commentsCount');
-//         }
-//     } catch (error) {
-//         console.error('Erro ao decrementar commentsCount:', error);
-//     }
-// });
+
+Comment.afterDestroy(async (comment) => {
+    try {
+        const post = await Post.findByPk(comment.postId);
+        if(post) await post.decrement('commentsCount');
+    } catch (error) {
+        console.error('Erro ao decrementar commentsCount:', error);
+    }
+});
+
 
 export { sequelize, User, Post, Like, Bubble, bubbleAside, Follow, BubbleMember, Category, Notification }

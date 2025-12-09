@@ -1,13 +1,15 @@
-import { Post, User, Category } from '../../models/associations.js'
-import { Op } from 'sequelize'
+import { Post, User } from '../../models/associations.js';
+import { Op } from 'sequelize';
 
 export const getAllPostsController = async (req, res) => {
   try {
-    const { userId, keyword, limit = 20, page = 1 } = req.query;
+    const { userId, keyword, bubbleId, limit = 20, page = 1 } = req.query;
 
     const whereClause = {};
-    if(userId) whereClause.userId = userId;
-    if(keyword) whereClause.description = { [Op.like]: `%${keyword}%` };
+
+    if (userId) whereClause.userId = userId;
+    if (keyword) whereClause.description = { [Op.like]: `%${keyword}%` };
+    if (bubbleId) whereClause.bubbleId = parseInt(bubbleId); 
 
     const posts = await Post.findAll({
       where: whereClause,
@@ -16,7 +18,8 @@ export const getAllPostsController = async (req, res) => {
           model: User,
           as: 'author',
           attributes: ["id", "nickname", "username", "profilePic"]
-        },],
+        },
+      ],
       attributes: [
         'id', 'description', 'createdAt',
         'likesCount', 'commentsCount', 'media'

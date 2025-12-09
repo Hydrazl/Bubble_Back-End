@@ -4,6 +4,7 @@ dotenv.config();
 import app from './src/app.js';
 import sequelize from './src/config/database.js';
 import { seedUsers } from "./src/seeders/userSeeder.js";
+import { seedBubbles } from './src/seeders/bubbleSeeder.js';
 
 const PORT = process.env.PORT || 4000
 
@@ -12,6 +13,7 @@ async function startServer() {
         await sequelize.sync();
         console.log("Database has sucessful connected!");
         await seedUsers();
+        await seedBubbles();
         
         app.listen(PORT, () => {
             console.log(`Server is running on http:localhost:${PORT}`);

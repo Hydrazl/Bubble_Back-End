@@ -10,6 +10,7 @@ import likeRoutes from './routes/likeRoutes.js';
 import followRoutes from './routes/followRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import bubbleRoutes from './routes/bubbleRoutes.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -38,6 +39,7 @@ app.use('/', userRoutes);
 app.use('/', likeRoutes);
 app.use('/', profileRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/bubbles', bubbleRoutes);
 
 
 export default app;

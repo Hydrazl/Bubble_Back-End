@@ -2,7 +2,8 @@ import Post from '../../models/postModel.js';
 
 export async function newPostController(req, res) {
     try {
-        const { userId, description, mediaURL, nickname, category } = req.body;
+        // Pegando os dados do body, incluindo bubbleId
+        const { userId, description, mediaURL, bubbleId } = req.body;
 
         if (!userId) {
             return res.status(400).json({ message: "Usuário não informado." });
@@ -10,28 +11,28 @@ export async function newPostController(req, res) {
 
         let media = null;
 
-        // Se vier arquivo via Multer
+        // Se veio arquivo via Multer
         if (req.file) {
             media = `posts/${req.file.filename}`;
-        }
-
-        // Se vier URL de mídia direto
+        } 
+        // Se veio URL de mídia direto
         else if (mediaURL && mediaURL.trim() !== "") {
             media = mediaURL.trim();
         }
 
-        // Validar se tem pelo menos mídia OU descrição
+        // Validar se tem pelo menos descrição ou mídia
         if (!description?.trim() && !media) {
             return res.status(400).json({
                 message: "Preencha a descrição ou envie uma mídia."
             });
         }
 
+        // Criar o post somente para a bolha selecionada
         const newPost = await Post.create({
             userId,
             description: description?.trim() || null,
             media,
-            category
+            bubbleId: bubbleId ? parseInt(bubbleId) : null
         });
 
         return res.status(201).json({

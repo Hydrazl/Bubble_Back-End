@@ -5,6 +5,7 @@ import Like from './likeModel.js'
 import Follow from "./followModel.js";
 import Bubble from "./BubbleModel.js";
 import BubbleMember from "./BubbleMemberModel.js";
+import bubbleAside from './bubbleAsideModel.js';
 import Category from "./categoryModel.js";
 import Notification from "./notificationModel.js";
 // import Comment from "./commentModel.js";
@@ -33,6 +34,10 @@ Like.belongsTo(Post, { foreignKey: 'postId' });
 
 // Realacionamento Bubble
 Bubble.belongsToMany(User, { through: BubbleMember, as: 'members', foreignKey: 'bubbleId' })
+
+// Relacionamento das bolhas com os posts
+Bubble.hasMany(Post, { foreignKey: "bubbleId", as: "posts" });
+Post.belongsTo(bubbleAside, { foreignKey: "bubbleId", as: "bubble" });
 
 // Relacionamento Notification
 Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
@@ -142,4 +147,4 @@ Follow.afterDestroy(async (follow, options) => {
 //     }
 // });
 
-export { sequelize, User, Post, Like, Bubble, Follow, BubbleMember, Category, Notification }
+export { sequelize, User, Post, Like, Bubble, bubbleAside, Follow, BubbleMember, Category, Notification }

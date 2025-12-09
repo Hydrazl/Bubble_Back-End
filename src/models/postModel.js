@@ -11,6 +11,10 @@ const Post = sequelize.define("Post", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  bubbleId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   description: {
     type: DataTypes.TEXT,
     allowNull: true,

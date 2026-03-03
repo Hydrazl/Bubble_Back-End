@@ -1,11 +1,53 @@
 import express from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
+import userRoutes from './routes/userRoutes.js';
+import postRoutes from './routes/postRoutes.js';
+import likeRoutes from './routes/likeRoutes.js';
+import followRoutes from './routes/followRoutes.js';
+import trendingRoutes from './routes/trendingRoutes.js';
+import trendingPostRoutes from './routes/trendingPostRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import bubbleRoutes from './routes/bubbleRoutes.js';
+import commentRoutes from './routes/commentsRoutes.js';
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use(express.json()); // Nós permite fazer o uso do JSON no corpo de requisições
+// Middlewares
+app.use(express.json());
+app.use(bodyParser.json());
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+
+// Arquivos de upload (IMAGENS)
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+// Rotas
 app.get('/', (req, res) => {
-    res.send('Hello world');
+  res.send('Hello world');
 });
+
+app.use('/', postRoutes);
+app.use('/', followRoutes);
+app.use('/', userRoutes);
+app.use('/', likeRoutes);
+app.use('/', profileRoutes); 
+app.use('/', trendingRoutes);
+app.use('/trending', trendingPostRoutes)
+app.use('/notifications', notificationRoutes);
+app.use('/bubbles', bubbleRoutes);
+app.use('/', commentRoutes);
+
+
+
 
 export default app;
